@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from django.db import models
 
@@ -25,7 +25,18 @@ class Account(models.Model):
     is_closed = models.BooleanField()
     comment = models.TextField()
 
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=10)
+    parent_category = models.ForeignKey('self', on_delete=models.CASCADE)
+    comment = models.TextField()
+
+
 #TODO: create model Transaction
 class Transaction(models.Model):
-    operation_date = models.DateField(default=datetime.now())
-    pass
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    transaction_date = models.DateField(default=datetime.now)
+    transaction_type = models.CharField(max_length=20)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
+    comment = models.TextField()
